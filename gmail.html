@@ -147,7 +147,7 @@
          *  Sign in the user upon button click.
          */
         function handleAuthClick(event) {
-            gapi.auth2.getAuthInstance().signIn();
+            gapi.auth2.getAuthInstance().signIn().then(function(){}, function(error){ if (error) alert('please allow popup for this app')});
         }
 
         /**
