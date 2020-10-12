@@ -44,6 +44,9 @@
             else if(event.data == "getEmails"){
                 getEmails();
             }
+            else if(event.data == "sendEmail"){
+                sendEmail();
+            }
             //document.getElementById("authorize_button").click();
         });
         async function getEmails() {
@@ -96,7 +99,31 @@
         function onloadIfrmae(status) {
             window.top.postMessage(status, "*");
         }
+        function sendEmail()
+      {
+        var email = '';
 
+        var headers_obj = {
+            'To': 'pooja.naraharisett@500apps.com',
+            'Subject': 'Send Mail'
+        }
+
+        var message = 'In body'
+
+        for(var header in headers_obj)
+          email += header += ": "+headers_obj[header]+"\r\n";
+
+        email += "\r\n" + message;
+
+        var sendRequest = gapi.client.gmail.users.messages.send({
+          'userId': 'me',
+          'resource': {
+            'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
+          }
+        });
+
+        return sendRequest.execute();
+      }
 
         /**
          *  On load, called to load the auth2 library and API client library.
