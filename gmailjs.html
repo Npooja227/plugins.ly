@@ -28,6 +28,7 @@
         var signoutButton = document.getElementById('signout_button');
 
         window.addEventListener('message', (event) => {
+            console.log(event);
             if (event.data == "signin") {
                 gapi.auth2.getAuthInstance().signIn().then(function(){}, function(error){ if (error) alert('please allow popup for this app')});
                 window.signIntrval = setInterval(() => {
