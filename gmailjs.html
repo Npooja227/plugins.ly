@@ -67,7 +67,7 @@
                     id: gmailResp.result.messages[i].id
                 });
                 await request2.then((resp) => {
-                    var mailResp = {}
+                    var mailResp = {'threadId': resp.result.thread_id }
                     resp.result.payload.headers.forEach((item) => {
                         switch (item.name) {
                             case "From": mailResp["from"] = item.value;
@@ -77,6 +77,10 @@
                             case "Subject": mailResp["subject"] = item.value;
                                 break;
                             case "Date": mailResp["date"] = item.value;
+                                break;
+                            case "Message-ID": mailResp["reply_to_id"] = item.value;
+                                break;
+                            case "References": mailResp["references"] = item.value;
                                 break;
                             case "Content-Type": mailResp["contentType"] = item.value;
                         }
