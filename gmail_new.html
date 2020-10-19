@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -29,38 +30,33 @@
 
         window.addEventListener('message', (event) => {
             if (event.data == "signin") {
-                gapi.auth2.getAuthInstance().signIn().then(function(){}, function(error){ if (error) alert('please allow popup for this app')});
-                window.signIntrval = setInterval(() => {
-                    if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                        clearInterval(window.signIntrval);
-                        onloadIfrmae("signin");
-                        //getEmails();
-                    }
-                }, 1000);
+                gapi.auth2.getAuthInstance().signIn().then(()=>{
+                    //alert(gapi.auth2.getAuthInstance().isSignedIn.get());
+                    onloadIfrmae("signin");
+                });
             }
             else if(event.data == "signout"){
                 gapi.auth2.getAuthInstance().signOut();
             }
-            else if(event.data == "getEmails"){
-                getEmails();
+            else if(event.data.type == "getEmails"){
+                getEmails(event.data.email);
             }
             else if(event.data.type == "sendEmail"){
                 sendEmail(event.data.payload);
             }
             //document.getElementById("authorize_button").click();
         });
-        async function getEmails() {
+        async function getEmails(user_email) {
             var gmailResp = [];
             var gmailResp1 = [];
             var request = gapi.client.gmail.users.threads.list({
                 'userId': 'me',
                 labelIds: "INBOX",
                 maxResults: 10,
-                q: 'pooja.naraharisetty@500apps.com'
+                q: user_email
             })
             await request.then(function (response) {
                 gmailResp = response;
-                console.log(gmailResp);
             });
             for (var i = 0; i < gmailResp.result.threads.length; i++) {
                 var request2 = gapi.client.gmail.users.threads.get({
